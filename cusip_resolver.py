@@ -156,10 +156,12 @@ def resolve_cusips(
     rows = []
     for start in range(0, len(normalized), batch_size):
         batch = normalized[start:start + batch_size]
+        # SEC 13F reports 9-character CUSIPs. OpenFIGI currently accepts
+        # the first 8 characters using ID_CUSIP_8_CHR.
         payload = [
             {
-                "idType": "ID_CUSIP",
-                "idValue": cusip,
+                "idType": "ID_CUSIP_8_CHR",
+                "idValue": cusip[:8],
                 "marketSecDes": "Equity",
             }
             for cusip in batch
